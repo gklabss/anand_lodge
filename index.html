@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anand Lodge – Kharagpur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────────────── */
+    :root {
+      --cream:    #FAF5EE;
+      --cream2:   #F2E9D8;
+      --rust:     #B5541A;
+      --rust-dk:  #8C3D0F;
+      --brown:    #5C3317;
+      --ink:      #2A1705;
+      --gold:     #C89848;
+      --gold-lt:  #E8D08A;
+      --muted:    #9A7B5C;
+      --white:    #FFFFFF;
+      --shadow:   0 4px 32px rgba(42,23,5,.10);
+      --rad:      8px;
+      --ff-head:  'Cormorant Garamond', Georgia, serif;
+      --ff-body:  'Jost', sans-serif;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--ff-body);
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    img { display: block; width: 100%; object-fit: cover; }
+    a { text-decoration: none; color: inherit; }
+    section { padding: 80px 0; }
+
+    /* ─── Grain overlay ─────────────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      background-size: 150px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .5;
+    }
+
+    /* ─── Container ─────────────────────────────────────────────────── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Language Bar ──────────────────────────────────────────────── */
+    #lang-bar {
+      background: var(--brown);
+      padding: 8px 24px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+    }
+    #lang-bar span.label {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-right: 12px;
+      opacity: .8;
+    }
+    .lang-opt {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 20px;
+      transition: background .2s;
+    }
+    .lang-opt:hover { background: rgba(255,255,255,.08); }
+    .lang-opt input[type="radio"] {
+      accent-color: var(--gold);
+      cursor: pointer;
+      width: 13px; height: 13px;
+    }
+    .lang-opt label {
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--cream);
+      letter-spacing: .04em;
+      font-weight: 400;
+    }
+
+    /* ─── Sticky Nav ────────────────────────────────────────────────── */
+    #navbar {
+      background: rgba(250,245,238,.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(185,84,26,.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo {
+      font-family: var(--ff-head);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--rust);
+      letter-spacing: .02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo .dot {
+      width: 7px; height: 7px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+    }
+    nav ul li a {
+      font-size: 13px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--brown);
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color .2s;
+    }
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--rust);
+      transition: width .25s ease;
+    }
+    nav ul li a:hover { color: var(--rust); }
+    nav ul li a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--brown);
+      border-radius: 2px;
+      transition: .3s;
+    }
+    .nav-menu.open { display: flex !important; }
+
+    /* ─── Hero ──────────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+    }
+    #hero .hero-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(165deg, rgba(42,23,5,.62) 0%, rgba(92,51,23,.45) 55%, rgba(181,84,26,.3) 100%),
+        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center 40%;
+      transform: scale(1.03);
+      animation: heroZoom 14s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.03); }
+      to   { transform: scale(1.09); }
+    }
+    .hero-content {
+      position: relative;
+      text-align: center;
+      color: var(--white);
+      padding: 0 24px;
+      animation: fadeUp .9s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid rgba(232,208,138,.55);
+      color: var(--gold-lt);
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 5px 18px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+      font-family: var(--ff-body);
+      backdrop-filter: blur(4px);
+    }
+    .hero-title {
+      font-family: var(--ff-head);
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      text-shadow: 0 2px 24px rgba(0,0,0,.3);
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: clamp(14px, 2.2vw, 18px);
+      font-weight: 300;
+      letter-spacing: .06em;
+      opacity: .88;
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+    .hero-divider {
+      width: 48px; height: 1.5px;
+      background: var(--gold);
+      margin: 0 auto 28px;
+      opacity: .8;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--rust);
+      color: var(--white);
+      padding: 13px 36px;
+      border-radius: 3px;
+      font-size: 12.5px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: background .25s, transform .2s;
+      box-shadow: 0 4px 20px rgba(181,84,26,.4);
+    }
+    .hero-cta:hover {
+      background: var(--rust-dk);
+      transform: translateY(-2px);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,.55);
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .hero-scroll .line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%,100% { opacity: .4; }
+      50% { opacity: 1; }
+    }
+
+    /* ─── Section Headings ──────────────────────────────────────────── */
+    .section-label {
+      font-size: 10.5px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: var(--ff-head);
+      font-size: clamp(30px, 4.5vw, 46px);
+      font-weight: 600;
+      color: var(--brown);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .section-rule {
+      width: 40px; height: 2px;
+      background: var(--gold);
+      margin-bottom: 20px;
+    }
+    .section-body {
+      font-size: 15.5px;
+      color: #6B4C2F;
+      line-height: 1.85;
+      max-width: 580px;
+    }
+
+    /* ─── About ─────────────────────────────────────────────────────── */
+    #about { background: var(--white); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .about-image {
+      position: relative;
+    }
+    .about-image img {
+      border-radius: var(--rad);
+      height: 400px;
+      box-shadow: var(--shadow);
+    }
+    .about-image::before {
+      content: '';
+      position: absolute;
+      top: -14px; left: -14px;
+      right: 14px; bottom: 14px;
+      border: 2px solid var(--gold);
+      border-radius: var(--rad);
+      opacity: .4;
+      z-index: -1;
+    }
+    .about-stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 36px;
+    }
+    .stat-box {
+      text-align: center;
+      padding: 16px 22px;
+      border: 1px solid var(--cream2);
+      border-radius: var(--rad);
+      background: var(--cream);
+      flex: 1;
+    }
+    .stat-num {
+      font-family: var(--ff-head);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--rust);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* ─── Amenities ─────────────────────────────────────────────────── */
+    #amenities { background: var(--cream); }
+    .amenities-header { text-align: center; margin-bottom: 52px; }
+    .amenities-header .section-rule { margin: 0 auto 20px; }
+    .amenities-header .section-body { margin: 0 auto; text-align: center; }
+    .amenity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .amenity-card {
+      background: var(--white);
+      border-radius: var(--rad);
+      padding: 32px 28px;
+      border: 1px solid rgba(200,152,72,.15);
+      transition: transform .25s, box-shadow .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .amenity-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--rust);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform .3s ease;
+    }
+    .amenity-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .amenity-card:hover::before { transform: scaleY(1); }
+    .amenity-icon {
+      font-size: 32px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .amenity-name {
+      font-family: var(--ff-head);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 8px;
+    }
+    .amenity-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+
+    /* ─── Contact ───────────────────────────────────────────────────── */
+    #contact { background: var(--cream2); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: var(--rust);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      color: white;
+    }
+    .contact-detail-label {
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .contact-detail-value {
+      font-size: 15px;
+      color: var(--brown);
+      font-weight: 500;
+      line-height: 1.6;
+    }
+    .map-wrapper {
+      border-radius: var(--rad);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 3px solid var(--white);
+    }
+    .map-wrapper iframe {
+      display: block;
+      width: 100%;
+      height: 360px;
+      border: none;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 28px 24px;
+    }
+    footer .foot-logo {
+      font-family: var(--ff-head);
+      font-size: 24px;
+      color: var(--gold-lt);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    footer p {
+      font-size: 12.5px;
+      letter-spacing: .04em;
+    }
+    footer a { color: var(--gold); transition: opacity .2s; }
+    footer a:hover { opacity: .75; }
+
+    /* ─── Responsive ────────────────────────────────────────────────── */
+    @media (max-width: 880px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-image { display: none; }
+      .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { grid-template-columns: 1fr; }
+
+    }
+    @media (max-width: 600px) {
+      section { padding: 56px 0; }
+      .amenity-grid { grid-template-columns: 1fr; }
+      nav ul { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--cream); padding: 16px 24px; border-bottom: 1px solid var(--cream2); gap: 16px; }
+      .hamburger { display: flex; }
+      .about-stats { flex-direction: column; gap: 12px; }
+    }
+
+    /* ─── Performance: Reduced Motion ───────────────────────────────── */
+    /* Respects user OS-level "reduce motion" preference (accessibility + perf) */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      #hero .hero-bg { animation: none; }
+      .hero-scroll .line { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ─── Performance: Lighter rendering on low-end / small screens ─── */
+    /* Disables the fixed grain overlay and backdrop-filter on narrow viewports
+       where compositing layers are expensive on budget hardware.            */
+    @media (max-width: 480px) {
+      body::after {
+        /* Grain overlay removed — avoids a full-screen composited layer */
+        display: none;
+      }
+      #navbar {
+        /* Replace backdrop-filter with a solid fallback */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: var(--cream);
+      }
+      .amenity-card,
+      .gallery-item,
+      .contact-item,
+      .stat-box {
+        /* Disable will-change hints that trigger GPU layers on low-RAM devices */
+        will-change: auto;
+        /* Swap box-shadow for a lighter border on very small screens */
+        box-shadow: none;
+        border: 1px solid var(--cream2);
+      }
+    }
+
+    /* ─── i18n visibility ───────────────────────────────────────────── */
+    [data-lang] { display: none; }
+    [data-lang="en"] { display: inline; }
+    .block-lang[data-lang] { display: none; }
+    .block-lang[data-lang="en"] { display: block; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ─── Language Bar ─────────────────────────────────────────────── -->
+  <div id="lang-bar">
+    <span class="label">Language</span>
+
+    <label class="lang-opt">
+      <input type="radio" name="lang" value="en" checked onchange="switchLang('en')" />
+      <span>English</span>
+    </label>
+
+    <label class="lang-opt">
+      <input type="radio" name="lang" value="hi" onchange="switchLang('hi')" />
+      <span>हिंदी</span>
+    </label>
+
+    <label class="lang-opt">
+      <input type="radio" name="lang" value="bn" onchange="switchLang('bn')" />
+      <span>বাংলা</span>
+    </label>
+  </div>
+
+  <!-- ─── Navbar ───────────────────────────────────────────────────── -->
+  <header id="navbar">
+    <div class="container nav-inner">
+      <div class="nav-logo">
+        <span class="dot"></span>
+        Anand Lodge
+      </div>
+      <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
+      <nav>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#about">
+            <span data-lang="en">About</span>
+            <span data-lang="hi">परिचय</span>
+            <span data-lang="bn">পরিচয়</span>
+          </a></li>
+          <li><a href="#amenities">
+            <span data-lang="en">Amenities</span>
+            <span data-lang="hi">सुविधाएँ</span>
+            <span data-lang="bn">সুবিধাসমূহ</span>
+          </a></li>
+          <li><a href="#contact">
+            <span data-lang="en">Contact</span>
+            <span data-lang="hi">संपर्क</span>
+            <span data-lang="bn">যোগাযোগ</span>
+          </a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ─── Hero ─────────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span data-lang="en">Kharagpur, West Bengal</span>
+        <span data-lang="hi">खड़गपुर, पश्चिम बंगाल</span>
+        <span data-lang="bn">খড়গপুর, পশ্চিমবঙ্গ</span>
+      </div>
+      <h1 class="hero-title">Anand Lodge</h1>
+      <div class="hero-divider"></div>
+      <p class="hero-sub">
+        <span data-lang="en">Affordable Stay Near Kharagpur Railway Market</span>
+        <span data-lang="hi">खड़गपुर रेलवे मार्केट के पास किफ़ायती आवास</span>
+        <span data-lang="bn">খড়গপুর রেলওয়ে মার্কেটের কাছে সাশ্রয়ী থাকার ব্যবস্থা</span>
+      </p>
+      <a href="#contact" class="hero-cta">
+        <span data-lang="en">Find Us</span>
+        <span data-lang="hi">हमें खोजें</span>
+        <span data-lang="bn">আমাদের খুঁজুন</span>
+      </a>
+    </div>
+    <div class="hero-scroll">
+      <div class="line"></div>
+      <span data-lang="en">scroll</span>
+      <span data-lang="hi">स्क्रॉल</span>
+      <span data-lang="bn">স্ক্রোল</span>
+    </div>
+  </section>
+
+  <!-- ─── About ─────────────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-image">
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&q=80&auto=format&fit=crop" alt="Hotel room" />
+        </div>
+
+        <div class="about-text">
+          <p class="section-label">
+            <span data-lang="en">About Us</span>
+            <span data-lang="hi">हमारे बारे में</span>
+            <span data-lang="bn">আমাদের সম্পর্কে</span>
+          </p>
+          <h2 class="section-title">
+            <span data-lang="en">A Comfortable Home<br>Away from Home</span>
+            <span data-lang="hi">घर से दूर<br>एक आरामदायक ठिकाना</span>
+            <span data-lang="bn">ঘরের বাইরে<br>এক আরামদায়ক আশ্রয়</span>
+          </h2>
+          <div class="section-rule"></div>
+          <p class="section-body">
+            <span data-lang="en">Anand Lodge is a budget-friendly, no-fuss stay situated right at the heart of Kharagpur's Railway Market area. Whether you're a traveller passing through, here for work, or visiting family — our clean rooms, warm service and unbeatable location near the railway station make your stay easy and stress-free.</span>
+            <span data-lang="hi">आनंद लॉज एक किफ़ायती और सरल आवास है जो खड़गपुर के रेलवे मार्केट क्षेत्र के केंद्र में स्थित है। चाहे आप यात्रा करते हुए रुक रहे हों, काम के सिलसिले में आए हों या परिवार से मिलने आए हों — हमारे साफ कमरे, सौहार्दपूर्ण सेवा और रेलवे स्टेशन के पास की बेजोड़ स्थिति आपके प्रवास को आसान और तनावमुक्त बनाती है।</span>
+            <span data-lang="bn">আনন্দ লজ হল একটি সাশ্রয়ী ও সহজ আবাসন, যা খড়গপুরের রেলওয়ে মার্কেট এলাকার ঠিক কেন্দ্রে অবস্থিত। আপনি ভ্রমণকারী হোন, কাজে আসুন অথবা পরিবারের সাথে দেখা করতে আসুন — আমাদের পরিষ্কার কক্ষ, উষ্ণ পরিষেবা এবং রেলওয়ে স্টেশনের কাছের অতুলনীয় অবস্থান আপনার থাকাকে সহজ ও নির্ঝঞ্ঝাট করে তোলে।</span>
+          </p>
+
+          <div class="about-stats">
+            <div class="stat-box">
+              <div class="stat-num">24/7</div>
+              <div class="stat-lbl">
+                <span data-lang="en">Front Desk</span>
+                <span data-lang="hi">फ्रंट डेस्क</span>
+                <span data-lang="bn">ফ্রন্ট ডেস্ক</span>
+              </div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">~5<span style="font-size:.55em">min</span></div>
+              <div class="stat-lbl">
+                <span data-lang="en">From Station</span>
+                <span data-lang="hi">स्टेशन से</span>
+                <span data-lang="bn">স্টেশন থেকে</span>
+              </div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">₹</div>
+              <div class="stat-lbl">
+                <span data-lang="en">Budget Rates</span>
+                <span data-lang="hi">बजट दरें</span>
+                <span data-lang="bn">বাজেট মূল্য</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Amenities ─────────────────────────────────────────────────── -->
+  <section id="amenities">
+    <div class="container">
+      <div class="amenities-header">
+        <p class="section-label">
+          <span data-lang="en">What We Offer</span>
+          <span data-lang="hi">हम क्या प्रदान करते हैं</span>
+          <span data-lang="bn">আমরা কী প্রদান করি</span>
+        </p>
+        <h2 class="section-title">
+          <span data-lang="en">Our Amenities</span>
+          <span data-lang="hi">हमारी सुविधाएँ</span>
+          <span data-lang="bn">আমাদের সুবিধাসমূহ</span>
+        </h2>
+        <div class="section-rule"></div>
+        <p class="section-body">
+          <span data-lang="en">Everything you need for a pleasant, hassle-free stay — simple and reliable.</span>
+          <span data-lang="hi">एक सुखद और परेशानी-मुक्त प्रवास के लिए जो भी चाहिए — सरल और भरोसेमंद।</span>
+          <span data-lang="bn">একটি আনন্দদায়ক ও ঝামেলামুক্ত থাকার জন্য যা প্রয়োজন — সহজ ও নির্ভরযোগ্য।</span>
+        </p>
+      </div>
+
+      <div class="amenity-grid">
+
+        <div class="amenity-card">
+          <span class="amenity-icon">🛏️</span>
+          <div class="amenity-name">
+            <span data-lang="en">Clean Rooms</span>
+            <span data-lang="hi">साफ कमरे</span>
+            <span data-lang="bn">পরিষ্কার কক্ষ</span>
+          </div>
+          <div class="amenity-desc">
+            <span data-lang="en">Well-maintained, tidy rooms for a comfortable rest.</span>
+            <span data-lang="hi">आरामदायक विश्राम के लिए अच्छी तरह से बनाए रखे गए, साफ कमरे।</span>
+            <span data-lang="bn">আরামদায়ক বিশ্রামের জন্য সুব্যবস্থিত, পরিচ্ছন্ন কক্ষ।</span>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <span class="amenity-icon">🕐</span>
+          <div class="amenity-name">
+            <span data-lang="en">24-Hour Front Desk</span>
+            <span data-lang="hi">24 घंटे फ्रंट डेस्क</span>
+            <span data-lang="bn">২৪ ঘণ্টা ফ্রন্ট ডেস্ক</span>
+          </div>
+          <div class="amenity-desc">
+            <span data-lang="en">Our staff is always available to assist you, day or night.</span>
+            <span data-lang="hi">हमारा स्टाफ दिन हो या रात, हमेशा आपकी मदद के लिए उपलब्ध है।</span>
+            <span data-lang="bn">আমাদের কর্মীরা দিন হোক বা রাত, সবসময় আপনাকে সাহায্য করতে প্রস্তুত।</span>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <span class="amenity-icon">🚂</span>
+          <div class="amenity-name">
+            <span data-lang="en">Near Railway Station</span>
+            <span data-lang="hi">रेलवे स्टेशन के पास</span>
+            <span data-lang="bn">রেলওয়ে স্টেশনের কাছে</span>
+          </div>
+          <div class="amenity-desc">
+            <span data-lang="en">Just minutes away from Kharagpur Junction — ideal for transit travellers.</span>
+            <span data-lang="hi">खड़गपुर जंक्शन से बस कुछ मिनट की दूरी पर — पारगमन यात्रियों के लिए आदर्श।</span>
+            <span data-lang="bn">খড়গপুর জংশন থেকে মাত্র কয়েক মিনিটের পথ — ট্রানজিট ভ্রমণকারীদের জন্য আদর্শ।</span>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <span class="amenity-icon">🚿</span>
+          <div class="amenity-name">
+            <span data-lang="en">Attached Bathrooms</span>
+            <span data-lang="hi">संलग्न बाथरूम</span>
+            <span data-lang="bn">সংযুক্ত বাথরুম</span>
+          </div>
+          <div class="amenity-desc">
+            <span data-lang="en">Private, clean attached bathrooms in every room.</span>
+            <span data-lang="hi">हर कमरे में निजी, साफ संलग्न बाथरूम।</span>
+            <span data-lang="bn">প্রতিটি কক্ষে ব্যক্তিগত, পরিষ্কার সংযুক্ত বাথরুম।</span>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <span class="amenity-icon">💰</span>
+          <div class="amenity-name">
+            <span data-lang="en">Budget Friendly Pricing</span>
+            <span data-lang="hi">बजट अनुकूल मूल्य</span>
+            <span data-lang="bn">বাজেট-বান্ধব মূল্য</span>
+          </div>
+          <div class="amenity-desc">
+            <span data-lang="en">Honest rates that don't break your budget, with no hidden charges.</span>
+            <span data-lang="hi">ईमानदार दरें जो आपके बजट को नहीं तोड़ती और कोई छुपे हुए शुल्क नहीं।</span>
+            <span data-lang="bn">সৎ মূল্য যা আপনার বাজেট ভাঙবে না এবং কোনো লুকানো চার্জ নেই।</span>
+          </div>
+        </div>
+
+        <div class="amenity-card">
+          <span class="amenity-icon">📍</span>
+          <div class="amenity-name">
+            <span data-lang="en">Prime Location</span>
+            <span data-lang="hi">उत्तम स्थान</span>
+            <span data-lang="bn">প্রধান অবস্থান</span>
+          </div>
+          <div class="amenity-desc">
+            <span data-lang="en">Located at Bhandari Chowk, Railway Market — shops and food stalls at your doorstep.</span>
+            <span data-lang="hi">भंडारी चौक, रेलवे मार्केट में स्थित — दुकानें और खाद्य स्टॉल आपकी दहलीज पर।</span>
+            <span data-lang="bn">ভান্ডারি চক, রেলওয়ে মার্কেটে অবস্থিত — দোকান ও খাবারের স্টল আপনার দোরগোড়ায়।</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Contact ───────────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">
+        <span data-lang="en">Get in Touch</span>
+        <span data-lang="hi">संपर्क करें</span>
+        <span data-lang="bn">যোগাযোগ করুন</span>
+      </p>
+      <h2 class="section-title">
+        <span data-lang="en">Contact & Location</span>
+        <span data-lang="hi">संपर्क और स्थान</span>
+        <span data-lang="bn">যোগাযোগ ও অবস্থান</span>
+      </h2>
+      <div class="section-rule"></div>
+
+      <div class="contact-grid" style="margin-top:44px;">
+
+        <div>
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-detail-label">
+                <span data-lang="en">Phone</span>
+                <span data-lang="hi">फ़ोन</span>
+                <span data-lang="bn">ফোন</span>
+              </div>
+              <div class="contact-detail-value">03222 255 886</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-detail-label">
+                <span data-lang="en">Address</span>
+                <span data-lang="hi">पता</span>
+                <span data-lang="bn">ঠিকানা</span>
+              </div>
+              <div class="contact-detail-value">
+                <span data-lang="en">Back side of Lassi Shop, Bhandari Chowk,<br>Railway Market, Gole Bazar Rd,<br>Kharagpur, West Bengal 721301</span>
+                <span data-lang="hi">लस्सी शॉप के पीछे, भंडारी चौक,<br>रेलवे मार्केट, गोले बाज़ार रोड,<br>खड़गपुर, पश्चिम बंगाल 721301</span>
+                <span data-lang="bn">লস্যি শপের পিছনে, ভান্ডারি চক,<br>রেলওয়ে মার্কেট, গোলে বাজার রোড,<br>খড়গপুর, পশ্চিমবঙ্গ ৭২১৩০১</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <div class="contact-detail-label">
+                <span data-lang="en">Hours</span>
+                <span data-lang="hi">समय</span>
+                <span data-lang="bn">সময়</span>
+              </div>
+              <div class="contact-detail-value">
+                <span data-lang="en">Open 24 Hours, 7 Days a Week</span>
+                <span data-lang="hi">24 घंटे, सप्ताह में 7 दिन खुला</span>
+                <span data-lang="bn">সপ্তাহের ৭ দিন, ২৪ ঘণ্টা খোলা</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-wrapper">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.0638370027716!2d87.31610361495814!3d22.34654754774327!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1d44985a9d6b57%3A0x5c9d4b14f0f08bc5!2sRailway%20Market%2C%20Kharagpur%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Anand Lodge Location Map">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ───────────────────────────────────────────────────── -->
+  <footer>
+    <div class="foot-logo">Anand Lodge</div>
+    <p>
+      <span data-lang="en">© 2026 Anand Lodge. All rights reserved.</span>
+      <span data-lang="hi">© 2026 आनंद लॉज। सर्वाधिकार सुरक्षित।</span>
+      <span data-lang="bn">© ২০২৬ আনন্দ লজ। সর্বস্বত্ব সংরক্ষিত।</span>
+    </p>
+    <p style="margin-top:6px; font-size:11.5px; opacity:.4;">
+      Bhandari Chowk, Railway Market, Kharagpur, WB 721301
+    </p>
+  </footer>
+
+  <!-- ─── JavaScript ────────────────────────────────────────────────── -->
+  <script>
+    /* Language Switch */
+    let currentLang = 'en';
+
+    function switchLang(lang) {
+      currentLang = lang;
+
+      // inline spans
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        if (!el.classList.contains('block-lang')) {
+          el.style.display = (el.getAttribute('data-lang') === lang) ? 'inline' : 'none';
+        }
+      });
+
+      // block divs
+      document.querySelectorAll('.block-lang[data-lang]').forEach(el => {
+        el.style.display = (el.getAttribute('data-lang') === lang) ? 'block' : 'none';
+      });
+
+      document.documentElement.lang = lang;
+    }
+
+    /* Hamburger Menu */
+    function toggleMenu() {
+      const menu = document.getElementById('nav-menu');
+      menu.classList.toggle('open');
+    }
+
+    /* Close nav on link click (mobile) */
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('nav-menu').classList.remove('open');
+      });
+    });
+
+    /* Navbar hide/show on scroll */
+    let lastScroll = 0;
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      const curr = window.scrollY;
+      if (curr > lastScroll && curr > 100) {
+        navbar.style.transform = 'translateY(-100%)';
+        navbar.style.transition = 'transform .35s ease';
+      } else {
+        navbar.style.transform = 'translateY(0)';
+      }
+      lastScroll = curr;
+    });
+
+    /* Fade-in on scroll */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.amenity-card, .contact-item, .stat-box').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity .55s ease, transform .55s ease';
+      observer.observe(el);
+    });
+
+    /* Init language display */
+    switchLang('en');
+  </script>
+
+</body>
+</html>
